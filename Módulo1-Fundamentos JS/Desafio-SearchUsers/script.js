@@ -116,8 +116,8 @@ function loaded() {
       filteredStatistics.innerHTML = "";
       const notUserFound = document.querySelector("#notUserFound");
       const notStatisticsFound = document.querySelector("#notStatisticsFound");
-      notUserFound.innerHTML = "Nada a ser exibido";
-      notStatisticsFound.innerHTML = "Nada a ser exibido";
+      notUserFound.innerHTML = "Nenhum usuário filtrado";
+      notStatisticsFound.innerHTML = "Nenhuma estatística";
     } else {
       fetchUsers()
         .then((results) => {

@@ -1,24 +1,41 @@
-@import url("https://fonts.googleapis.com/css2?family=Varta&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@500&display=swap");
 
 html {
   font-size: 62.5%;
-  font-family: "Varta", sans-serif;
+  font-family: "Baloo Da 2", cursive;
 }
 body {
   margin: 0;
 }
-
+header div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+header img {
+  width: 50px;
+  height: 34px;
+  margin-left: 10px;
+}
 header,
 form {
   text-align: center;
 }
-
 header h1 {
   font-size: 4rem;
 }
 
 input {
   width: 47vw;
+}
+
+form input,
+button {
+  padding: 10px;
+}
+button {
+  margin-left: 2px;
+  cursor: pointer;
 }
 
 main {
