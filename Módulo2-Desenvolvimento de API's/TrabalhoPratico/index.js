@@ -21,7 +21,7 @@ getInfos();
 // prettier-ignore
 async function createJsonFile() {
   for (let i = 0; i < info.length; i++)
-    await fs.writeFile(`./${folder}/${states[i].Sigla}.json`, JSON.stringify(info[i]),
+    await fs.writeFile(`./${folder}/${states[i].Sigla}.json`, JSON.stringify(info[i], null, 2),
     (err) => {
       if (err) throw err;
       console.log(err);
