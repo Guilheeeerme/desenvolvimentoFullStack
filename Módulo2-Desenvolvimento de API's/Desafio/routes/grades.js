@@ -45,4 +45,17 @@ router.put("/:id", async(req, res) => {
   res.send(newObject)
 })
 
+// Endpoint - Excluir grade (exercicio 3)
+// prettier-ignore
+router.delete("/:id", async(req, res) => {
+  const {id} = req.params;
+  const data = JSON.parse(await fs.readFile(`./${folder}/grades.json`));
+  const index = data.grades.findIndex(item => item.id == id);
+
+  data.grades.splice(index, 1);
+
+  await fs.writeFile(`./${folder}/grades.json`, JSON.stringify(data, null, 2));
+  res.send(data)
+})
+
 export default router;
