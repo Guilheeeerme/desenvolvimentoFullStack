@@ -6,7 +6,7 @@ const folder = "./data";
 
 // Endpoint - Criar grade (exercicio 1)
 // prettier-ignore
-router.post("/", async (req, res) => {
+router.post("/create", async (req, res) => {
   try {
     let gradeAdd = req.body;
     const data = JSON.parse(await fs.readFile(`./${folder}/grades.json`));
@@ -27,7 +27,7 @@ router.post("/", async (req, res) => {
 
 // Endpoint - Atualizar grade (exercicio 2)
 // prettier-ignore
-router.put("/:id", async(req, res) => {
+router.put("/update/:id", async(req, res) => {
   const {id} = req.params;
   const { student, subject, type, value } = req.body;
   const data = JSON.parse(await fs.readFile(`./${folder}/grades.json`));
@@ -47,7 +47,7 @@ router.put("/:id", async(req, res) => {
 
 // Endpoint - Excluir grade (exercicio 3)
 // prettier-ignore
-router.delete("/:id", async(req, res) => {
+router.delete("/delete/:id", async(req, res) => {
   const {id} = req.params;
   const data = JSON.parse(await fs.readFile(`./${folder}/grades.json`));
   const index = data.grades.findIndex(item => item.id == id);

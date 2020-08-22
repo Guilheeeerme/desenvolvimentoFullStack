@@ -1,9 +1,10 @@
 const fs = require("fs");
+const path = require("path");
 
 const cities = require("./data/Cidades.json");
 const states = require("./data/Estados.json");
 
-const folder = "./Módulo2-Desenvolvimento de API's/TrabalhoPratico/output";
+const folder = path.join(__dirname, "/output/");
 
 const info = [];
 
@@ -21,7 +22,7 @@ getInfos();
 // prettier-ignore
 async function createJsonFile() {
   for (let i = 0; i < info.length; i++)
-    await fs.writeFile(`./${folder}/${states[i].Sigla}.json`, JSON.stringify(info[i], null, 2),
+    await fs.writeFile(`${folder}${states[i].Sigla}.json`, JSON.stringify(info[i], null, 2),
     (err) => {
       if (err) throw err;
       console.log(err);
@@ -34,7 +35,7 @@ arquivo JSON correspondente e retorne a quantidade de cidades daquele estado. */
 // prettier-ignore
 async function numberOfCities(uf) {
   uf = uf.toLowerCase();
-  await fs.readFile(`./${folder}/${uf}.json`, (err, data) => {
+  await fs.readFile(`${folder}${uf}.json`, (err, data) => {
     if (err) throw err;
 
     let cities = JSON.parse(data);
