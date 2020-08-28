@@ -62,4 +62,22 @@ app.get("/saldo", async (req, res) => {
   }
 });
 
+app.delete("/excluir", async (req, res) => {
+  const { agencia, conta } = req.body;
+  if (!agencia || !conta) {
+    return res.status(400).send("Parâmetros inválidos");
+  }
+
+  try {
+    const data = await accountModel.findOneAndDelete({ agencia, conta });
+    if (!data) {
+      res.status(404).send("Conta inexistente");
+    }
+    const contasAtivas = await accountModel.find({ agencia });
+    res.send(contasAtivas);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 export { app as accountRouter };
