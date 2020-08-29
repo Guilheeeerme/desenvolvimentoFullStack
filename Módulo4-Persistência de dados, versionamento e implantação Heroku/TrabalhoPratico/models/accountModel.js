@@ -7,9 +7,9 @@ const ObjectId = Schema.ObjectId;
 // prettier-ignore
 const accountSchema = new Schema({
   _id:     { type: ObjectId },
-  agencia: { type: Number, require: true },
-  conta:   { type: Number, require: true },
-  name:    { type: String, require: true },
+  agencia: { type: Number, required: true },
+  conta:   { type: Number, required: true },
+  name:    { type: String, required: true },
   balance: { type: Number, min: 0 },
 });
 
