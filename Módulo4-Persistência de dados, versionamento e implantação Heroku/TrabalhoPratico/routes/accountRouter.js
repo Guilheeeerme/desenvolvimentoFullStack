@@ -11,4 +11,6 @@ app.get("/saldo", accountController.saldo);
 
 app.delete("/excluir", accountController.excluir);
 
+app.post("/transferir", accountController.transferir);
+
 export { app as accountRouter };

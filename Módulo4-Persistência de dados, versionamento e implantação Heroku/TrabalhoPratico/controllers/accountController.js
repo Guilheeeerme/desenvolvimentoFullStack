@@ -76,4 +76,25 @@ const excluir = async (req, res) => {
   }
 };
 
-export default { deposito, saque, saldo, excluir };
+const transferir = async (req, res) => {
+  const { accOrigem, accDestino, valor } = req.body;
+  if (!accOrigem || !accDestino || !valor) {
+    return res.status(400).send("Parâmetros inválidos");
+  }
+
+  const findAccOrigem = await accountModel.findOne({ conta: accOrigem });
+  const findAccDestino = await accountModel.findOne({ conta: accDestino });
+
+  if (findAccOrigem.agencia !== findAccDestino.agencia) {
+    findAccOrigem.balance -= 8;
+  }
+
+  findAccOrigem.balance -= valor;
+  findAccDestino.balance += valor;
+
+  await findAccOrigem.save();
+  await findAccDestino.save();
+  res.send(findAccOrigem);
+};
+
+export default { deposito, saque, saldo, excluir, transferir };
