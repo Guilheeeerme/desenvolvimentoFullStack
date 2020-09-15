@@ -21,12 +21,12 @@
 - Instalação e configuração do React. Criação de projetos com o create-react-app.
 - Introdução ao React – JSX, Componentes de Funções, Componentes de Classe, State, Props, Binding, Interpolação.
 - Comunicação entre componentes. Ciclo de vida de componentes de classe. Introdução às requisições HTTP com React.
-- Roteamento com react-router. Introdução ao Ionic React.
+- Roteamento com react-router.
 - Criação de um pequeno projeto passo-a-passo com React.
 
 ###### Módulo 4 - Persistência de dados, versionamento de código e implantação
 
-- Introdução ao MongoDB. Utilização do serviço mLab. Integrando a API ao MongoDB no mLab.
+- Introdução ao MongoDB. Integrando a API ao MongoDB Atlas.
 - Introdução ao Git. Instalação do git. Principais comandos do Git.
 - Como publicar aplicações no Github. Introdução ao Heroku. Instalação do Heroku CLI.
 - Como implantar aplicações no Heroku.
