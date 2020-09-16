@@ -1,9 +1,11 @@
+const { listenerCount } = require("process");
+
 const fs = require("fs").promises; // Evitar precisar fazer then/catch
 
 init();
 async function init() {
   await createJsonFile();
-  console.log(await getCitiesCount("SP"));
+  await getStatesWithMoreCities();
 }
 
 /* Criar uma função que irá criar um arquivo JSON para cada estado representado no arquivo Estado.json,
@@ -35,4 +37,30 @@ async function getCitiesCount(uf) {
   const data = await fs.readFile(`./output/${uf}.json`);
   const cities = JSON.parse(data);
   return `O estado ${uf} tem ${cities.length} cidades.`;
+}
+
+// Criar um método que imprima no console um array com o UF dos cinco estados
+// que mais possuem cidades, seguidos da quantidade, em ordem decrescente. Você
+// pode usar a função criada no tópico 2. Exemplo de impressão: [“UF - 93”, “UF - 82”,
+// “UF - 74”, “UF - 72”, “UF - 65”]
+
+async function getStatesWithMoreCities() {
+  const states = JSON.parse(await fs.readFile("./data/Estados.json"));
+  const list = [];
+
+  for (state of states) {
+    const count = await getCitiesCount(state.Sigla);
+    list.push({ uf: state.Sigla, count });
+  }
+
+  list.sort((a, b) => {
+    if (a.count < b.count) return 1;
+    else if (a.count > b.count) return -1;
+    else return 0;
+  });
+
+  const result = [];
+  list.slice(0, 5).forEach((item) => result.push(item.uf + " - " + item.count));
+
+  console.log(result);
 }
