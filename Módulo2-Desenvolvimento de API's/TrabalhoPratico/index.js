@@ -7,8 +7,10 @@ async function init() {
   await createJsonFile();
   await getStatesWithMoreOrLessCities(true); // para pegar os estados que tem mais cidades
   await getStatesWithMoreOrLessCities(false); // para pegar os estados que tem menos cidades
-  await getBiggerOrSmallerNameCities(true); // 'maiores' cidades
-  await getBiggerOrSmallerNameCities(false); // 'menores'
+  await getBiggerOrSmallerNameCities(true); // maior nome de cidade
+  await getBiggerOrSmallerNameCities(false); // menor nome de cidade
+  await getBiggerOrSmallerCityName(true); // maior nome entre todos estados
+  await getBiggerOrSmallerCityName(false); // menos nome entre todos estados
 }
 
 /* Criar uma função que irá criar um arquivo JSON para cada estado representado no arquivo Estado.json,
@@ -75,6 +77,12 @@ async function getStatesWithMoreOrLessCities(more) {
 // Criar um método que imprima no console um array com a cidade de maior nome de
 // cada estado, seguida de seu UF. Por exemplo: [“Nome da Cidade – UF”, “Nome da
 // Cidade – UF”, ...].
+
+// &&&
+
+// Criar um método que imprima no console um array com a cidade de menor nome
+// de cada estado, seguida de seu UF. Por exemplo: [“Nome da Cidade – UF”, “Nome
+// da Cidade – UF”, ...].
 async function getBiggerOrSmallerNameCities(bigger) {
   const states = JSON.parse(await fs.readFile("./data/Estados.json"));
   const result = [];
@@ -105,9 +113,6 @@ async function getBiggerName(uf) {
   return result;
 }
 
-// Criar um método que imprima no console um array com a cidade de menor nome
-// de cada estado, seguida de seu UF. Por exemplo: [“Nome da Cidade – UF”, “Nome
-// da Cidade – UF”, ...].
 async function getSmallerName(uf) {
   const cities = JSON.parse(await fs.readFile(`./output/${uf}.json`));
 
@@ -121,4 +126,43 @@ async function getSmallerName(uf) {
   });
 
   return result;
+}
+
+// Criar um método que imprima no console a cidade de maior nome entre todos os
+// estados, seguido do seu UF. Exemplo: “Nome da Cidade - UF".
+
+// &&&
+
+// Criar um método que imprima no console a cidade de menor nome entre todos os
+// estados, seguido do seu UF. Exemplo: “Nome da Cidade - UF".
+async function getBiggerOrSmallerCityName(bigger) {
+  const states = JSON.parse(await fs.readFile("./files/Estados.json"));
+  const list = [];
+  for (state of states) {
+    let city;
+    if (bigger) {
+      city = await getBiggerName(state.Sigla);
+    } else {
+      city = await getSmallerName(state.Sigla);
+    }
+    list.push({ name: city.Nome, uf: state.Sigla });
+  }
+  const result = list.reduce((prev, current) => {
+    if (bigger) {
+      if (prev.name.length > current.name.length) return prev;
+      else if (prev.name.length < current.name.length) return current;
+      else
+        return prev.name.toLowerCase() < current.name.toLowerCase()
+          ? prev
+          : current;
+    } else {
+      if (prev.name.length < current.name.length) return prev;
+      else if (prev.name.length > current.name.length) return current;
+      else
+        return prev.name.toLowerCase() < current.name.toLowerCase()
+          ? prev
+          : current;
+    }
+  });
+  console.log(`${result.name} - ${result.uf}`);
 }
