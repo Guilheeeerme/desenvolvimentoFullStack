@@ -7,7 +7,8 @@ async function init() {
   await createJsonFile();
   await getStatesWithMoreOrLessCities(true); // para pegar os estados que tem mais cidades
   await getStatesWithMoreOrLessCities(false); // para pegar os estados que tem menos cidades
-  await getBiggerNameCities();
+  await getBiggerOrSmallerNameCities(true); // 'maiores' cidades
+  await getBiggerOrSmallerNameCities(false); // 'menores'
 }
 
 /* Criar uma função que irá criar um arquivo JSON para cada estado representado no arquivo Estado.json,
@@ -67,18 +68,23 @@ async function getStatesWithMoreOrLessCities(more) {
       .slice(0, 5)
       .forEach((item) => result.push(`${item.uf} - ${item.count}`));
   } else {
-    list.slice(-5).forEach((item) => result.push(item.uf + " - " + item.count));
+    list.slice(-5).forEach((item) => result.push(`${item.uf} - ${item.count}`));
   }
 }
 
 // Criar um método que imprima no console um array com a cidade de maior nome de
 // cada estado, seguida de seu UF. Por exemplo: [“Nome da Cidade – UF”, “Nome da
 // Cidade – UF”, ...].
-async function getBiggerNameCities() {
+async function getBiggerOrSmallerNameCities(bigger) {
   const states = JSON.parse(await fs.readFile("./data/Estados.json"));
   const result = [];
   for (state of states) {
-    const city = await getBiggerName(state.Sigla);
+    let city;
+    if (bigger) {
+      city = await getBiggerName(state.Sigla);
+    } else {
+      city = await getSmallerName(state.Sigla);
+    }
     result.push(`${city.Nome} - ${state.Sigla}`);
   }
   console.log(result);
@@ -93,6 +99,24 @@ async function getBiggerName(uf) {
   cities.forEach((city) => {
     if (!result) result = city;
     else if (city.Nome.length > result.Nome.length) result = city;
+    else if (city.Nome.length === result.Nome.length && city.Nome.toLowerCase() < result.Nome.toLowerCase()) result = city;
+  });
+
+  return result;
+}
+
+// Criar um método que imprima no console um array com a cidade de menor nome
+// de cada estado, seguida de seu UF. Por exemplo: [“Nome da Cidade – UF”, “Nome
+// da Cidade – UF”, ...].
+async function getSmallerName(uf) {
+  const cities = JSON.parse(await fs.readFile(`./output/${uf}.json`));
+
+  let result;
+
+  // prettier-ignore
+  cities.forEach((city) => {
+    if (!result) result = city;
+    else if (city.Nome.length < result.Nome.length) result = city;
     else if (city.Nome.length === result.Nome.length && city.Nome.toLowerCase() < result.Nome.toLowerCase()) result = city;
   });
 
