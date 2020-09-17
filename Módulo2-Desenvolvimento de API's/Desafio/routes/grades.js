@@ -37,16 +37,19 @@ router.put("/", async (req, res) => {
 });
 
 // Endpoint - Excluir grade (exercicio 3)
-// prettier-ignore
-router.delete("/delete/:id", async(req, res) => {
-  const {id} = req.params;
-  const data = JSON.parse(await fs.readFile(global.fileName, "utf8"));
-  const index = data.grades.findIndex(item => item.id == id);
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const data = JSON.parse(await fs.readFile(global.fileName, "utf8"));
+    const index = data.grades.findIndex((grade) => grade.id == id);
 
-  data.grades.splice(index, 1);
+    data.grades.splice(index, 1);
 
-  await fs.writeFile(global.fileName, JSON.stringify(data, null, 2));
-  res.send(data)
-})
+    await fs.writeFile(global.fileName, JSON.stringify(data, null, 2));
+    res.send(data);
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
+});
 
 export default router;
