@@ -20,30 +20,27 @@ router.post("/", async (req, res) => {
 });
 
 // Endpoint - Atualizar grade (exercicio 2)
-// prettier-ignore
-router.put("/update/:id", async(req, res) => {
-  const {id} = req.params;
-  const { student, subject, type, value } = req.body;
-  const data = JSON.parse(await fs.readFile(global.fileName));
-  const index = data.grades.findIndex(item => item.id == id);
+router.put("/", async (req, res) => {
+  let updateGrade = req.body;
+  try {
+    const data = JSON.parse(await fs.readFile(global.fileName, "utf8"));
+    const index = data.grades.findIndex((grade) => grade.id == updateGrade.id);
 
-  if (index < 0 ) {
-    return res.status(400).json({ error: "User not found"});
+    // O ideal é fazer validações...
+    data.grades[index] = updateGrade;
+
+    await fs.writeFile(global.fileName, JSON.stringify(data, null, 2));
+    res.send(updateGrade);
+  } catch (error) {
+    res.status(400).send({ error: error.message });
   }
-
-  const newObject = { id: index, student, subject, type, value, timestamp: data.grades[index].timestamp };
-
-  data.grades[index] = {...newObject }
-
-  await fs.writeFile(global.fileName, JSON.stringify(data, null, 2));
-  res.send(newObject)
-})
+});
 
 // Endpoint - Excluir grade (exercicio 3)
 // prettier-ignore
 router.delete("/delete/:id", async(req, res) => {
   const {id} = req.params;
-  const data = JSON.parse(await fs.readFile(global.fileName));
+  const data = JSON.parse(await fs.readFile(global.fileName, "utf8"));
   const index = data.grades.findIndex(item => item.id == id);
 
   data.grades.splice(index, 1);
