@@ -1,19 +1,12 @@
 import express from "express";
 import gradesRouter from "./routes/grades.js";
-import { promises as fs } from "fs";
-
-const folder = "./data";
 
 const app = express();
+
+global.fileName = "./data/grades.json";
+
 app.use(express.json());
-
-app.use("/grades", gradesRouter);
-
-app.listen(3000, async () => {
-  try {
-    await fs.readFile(`./${folder}/grades.json`);
-  } catch (error) {
-    console.log(error);
-  }
+app.use("/grade", gradesRouter);
+app.listen(3000, () => {
   console.log("API Started");
 });
