@@ -52,4 +52,20 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+// Endpoint - Buscar grade (exercicio 4)
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const data = JSON.parse(await fs.readFile(global.fileName, "utf8"));
+    const grade = data.grades.find((grade) => grade.id == id);
+    if (grade) {
+      res.send(grade);
+    } else {
+      throw new Error("ID não existente");
+    }
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
+});
+
 export default router;
