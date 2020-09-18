@@ -68,4 +68,24 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// Endpoint - Consultar notal total de todas as notas (exercicio 5)
+// Post pega no body, GET via url
+router.post("/total", async (req, res) => {
+  try {
+    const data = JSON.parse(await fs.readFile(global.fileName, "utf8"));
+
+    const { student, subject } = req.body;
+    const grades = data.grades.filter(
+      (grade) => grade.student === student && grade.subject === subject
+    );
+
+    const total = grades.reduce((prev, curr) => {
+      return prev + curr.value;
+    }, 0);
+    res.send({ total });
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
+});
+
 export default router;
