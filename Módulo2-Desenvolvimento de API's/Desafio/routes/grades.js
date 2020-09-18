@@ -88,4 +88,28 @@ router.post("/total", async (req, res) => {
   }
 });
 
+// Endpoint - Consultar média das grades de um determinado subject e type (exercicio 6)
+router.get("/average/:subject/:type", async (req, res) => {
+  try {
+    const data = JSON.parse(await fs.readFile(global.fileName, "utf8"));
+
+    const { subject, type } = req.params;
+    const grades = data.grades.filter(
+      (grade) => grade.subject === subject && grade.type === type
+    );
+
+    if (!grades.length) {
+      throw new Error(
+        "Não foram encotrados registros para os parâmetros informados"
+      );
+    }
+    const total = grades.reduce((prev, curr) => {
+      return prev + curr.value;
+    }, 0);
+    res.send({ average: total / grades.length });
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
+});
+
 export default router;
