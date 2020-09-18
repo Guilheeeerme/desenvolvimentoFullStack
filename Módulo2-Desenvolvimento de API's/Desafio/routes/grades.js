@@ -112,4 +112,32 @@ router.get("/average/:subject/:type", async (req, res) => {
   }
 });
 
+// Endpoint - Três melhores grades de acordo com determinado subject e type (exercicio 7)
+router.post("/best", async (req, res) => {
+  try {
+    const data = JSON.parse(await fs.readFile(global.fileName, "utf8"));
+
+    const { subject, type } = req.body;
+    const grades = data.grades.filter(
+      (grade) => grade.subject === subject && grade.type === type
+    );
+
+    if (!grades.length) {
+      throw new Error(
+        "Não foram encotrados registros para os parâmetros informados"
+      );
+    }
+
+    grades.sort((a, b) => {
+      if (a.value < b.value) return 1;
+      else if (a.value > b.value) return -1;
+      else return 0;
+    });
+
+    res.send(grades.slice(0, 3));
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
+});
+
 export default router;
